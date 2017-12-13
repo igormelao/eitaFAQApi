@@ -1,5 +1,6 @@
 class Question < ApplicationRecord
   belongs_to :user
+  has_many :answers
 
   validates :ask, :user, presence: true
 
@@ -8,9 +9,13 @@ class Question < ApplicationRecord
   def as_json(options={})
     super(
           root: true,
-          only: [:id, :ask],
+          only: [:id, :ask, :answers],
           include: {
-                     user: { only: :name }
+                     user: { only: :name },
+                     answers: {
+                                only: [:id, :response ],
+                                include: { user: { only: :name } }
+                              }
                   }
       )
   end

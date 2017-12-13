@@ -6,6 +6,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
   let!(:user)             { FactoryBot.create(:user) }
   let!(:question_private) { FactoryBot.create(:question, private: true,  user: user) }
   let!(:question_public)  { FactoryBot.create(:question, private: false, user: user) }
+  let!(:answer)           { FactoryBot.create(:answer, question: question_public, user: user) }
 
   before(:each) do
     request.env['HTTP_ACCEPT'] = 'application/json'
@@ -19,6 +20,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
     before(:each) do
       question_private.save
       question_public.save
+      answer.save
 
       get :index
     end
@@ -30,6 +32,11 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
     it "assigns all public questions as @questions" do
       expect(assigns(:questions)).to eq([question_public])
       expect(assigns(:questions)).to_not eq([question_private])
+    end
+
+    it "expect that public question has a answer" do
+      @question_hash = JSON.parse(response.body)
+      expect(@question_hash[0]["question"]["answers"].count).to eq(1)
     end
 
   end
@@ -45,7 +52,7 @@ RSpec.describe Api::V1::QuestionsController, type: :controller do
       expect(response).to  have_http_status(200)
     end
 
-    it "assigns the requested question as @question" do
+    it "expect the request question to equals @question" do
       @question_hash = JSON.parse(response.body)
       expect(@question_hash["question"]["ask"]).to eq(question_public.ask)
     end
