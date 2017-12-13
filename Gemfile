@@ -18,6 +18,7 @@ gem 'simple_token_authentication', '~> 1.0'
 group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
@@ -27,8 +28,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'shoulda-matchers', require: false
   gem "factory_bot_rails"
   gem "ffaker"
+  gem 'rails-controller-testing'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
