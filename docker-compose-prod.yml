@@ -13,10 +13,10 @@ services:
     command: bash start.sh
     ports:
       - '3000:3000'
-    volumes:
-      - '.:/eitaFAQApi'
     volumes_from:
     - box
+    env_file:
+    - '.env-prod'
 
   box:
     image: busybox
