@@ -13,6 +13,6 @@ class Api::V1::QuestionsController < Api::V1::ApiController
   private
 
   def set_question
-    @question = Question.find(params[:id])
+    @question = Question.find_by_id_and_private(params[:id], false)
   end
 end
